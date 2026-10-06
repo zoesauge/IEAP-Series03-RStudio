@@ -5,3 +5,8 @@ the three groups?
 
 1. **How do we visualise it?** Mean MT (± SD) as a function of ID, one line per group. If the
    effect of ID is the same in all groups, the lines are parallel.
+   
+2. **Is there a significant difference?** In a mixed ANOVA, the effect of ID differs between
+   groups if the **GROUP × ID interaction** is significant. The main effects of GROUP and ID
+   are secondary, and must be read with care if the interaction is significant
+   [@field2012].
