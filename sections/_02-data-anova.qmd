@@ -1,0 +1,16 @@
+# Data reorganisation and ANOVA (1.3)
+
+## Load the data
+
+Each row of `Results.txt` is one movement: group, participant (`SUBJ`), trial, orientation
+(`ORI`), direction (`DIR`), index of difficulty (`ID`), repetition (`REP`), number of velocity
+peaks (`NbVelPeaks`, i.e. the number of sub-movements) and movement time in seconds.
+
+```{r}
+#| label: setup
+#| include: true
+library(tidyverse)  # data wrangling and ggplot2
+library(ez)         # mixed-design ANOVA (ezANOVA, ezPlot, ezStats)
+library(here)       # paths relative to the project root
+theme_set(theme_minimal(base_size = 11))
+```
