@@ -146,3 +146,17 @@ patients, Shapiro–Wilk p < .05). With unequal group sizes, this makes the p-va
 approximate. However, the effects are so large (p < .001 for all three effects) that this
 does not change the conclusion; a log transformation of MT, which reduces the skewness,
 would be a reasonable robustness check.
+
+## Result sentence {#sec-result-sentence}
+
+```{r}
+#| label: result-values
+#| include: false
+fmt_eff <- function(effect) {
+  r <- aov_tab[aov_tab$Effect == effect, ]
+  p_txt <- if (r$p < .001) "p < .001" else paste0("p = ", round(r$p, 3))
+  sprintf("*F*(%d, %d) = %.2f, %s, $\\eta^2_G$ = %.2f",
+          r$DFn, r$DFd, r$F, p_txt, r$ges)
+}
+m <- function(g, i) round(mt_summary$mean[mt_summary$GROUP == g & mt_summary$ID == i], 2)
+```
