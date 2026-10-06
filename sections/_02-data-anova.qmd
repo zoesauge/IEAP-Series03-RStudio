@@ -14,3 +14,10 @@ library(ez)         # mixed-design ANOVA (ezANOVA, ezPlot, ezStats)
 library(here)       # paths relative to the project root
 theme_set(theme_minimal(base_size = 11))
 ```
+
+```{r}
+#| label: load
+raw <- read.table(here("data", "Results.txt"), header = TRUE,
+                  stringsAsFactors = TRUE)
+glimpse(raw)
+```
