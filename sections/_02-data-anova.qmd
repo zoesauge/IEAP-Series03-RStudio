@@ -77,3 +77,17 @@ mt <- d |>
   summarise(MT = mean(MovementTime), .groups = "drop")
 mt |> count(GROUP, ID)
 ```
+
+## Run the ANOVA
+
+`ezANOVA()` takes the dependent variable (`dv`), the participant identifier (`wid`), the
+between-subjects factor and the within-subjects factor. We ask for type III sums of
+squares because the groups have unequal sizes (13, 19 and 19 participants).
+
+```{r}
+#| label: anova
+aov_mt <- ezANOVA(data = mt, dv = MT, wid = SUBJ,
+                  between = GROUP, within = ID, type = 3)
+aov_mt$ANOVA
+aov_tab <- aov_mt$ANOVA
+```
