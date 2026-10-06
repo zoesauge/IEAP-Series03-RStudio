@@ -1,0 +1,29 @@
+# Think before coding (1.1)
+
+**Scientific question.** Is the effect of task difficulty (ID) on movement time the same in
+the three groups?
+
+1. **How do we visualise it?** Mean MT (± SD) as a function of ID, one line per group. If the
+   effect of ID is the same in all groups, the lines are parallel.
+   
+2. **Is there a significant difference?** In a mixed ANOVA, the effect of ID differs between
+   groups if the **GROUP × ID interaction** is significant. The main effects of GROUP and ID
+   are secondary, and must be read with care if the interaction is significant
+   [@field2012].
+
+3. **What sentence do we write?** A sentence that gives the direction of the effect and the
+   statistics, F(DFn, DFd), p and an effect size.
+   
+# Which library? (1.2)
+
+We use **`ez`** [@lawrence2026], the library suggested first in the assignment. Its three
+functions cover the whole analysis with the same arguments (data, dependent variable,
+participant identifier, between- and within-subjects factors):
+
+- `ezANOVA()` runs the mixed ANOVA and returns the ANOVA table with the generalised eta
+  squared (*ges*) as effect size [@olejnik2003; @bakeman2005] and, when needed, Mauchly's
+  test of sphericity with the Greenhouse–Geisser and Huynh–Feldt corrections;
+- `ezPlot()` plots the cell means, with error bars that show which means differ;
+- `ezStats()` returns the descriptive statistics (N, mean, SD) of each cell.
+
+Data reorganisation and figures use the `tidyverse` [@wickham2019].
