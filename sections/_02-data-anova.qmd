@@ -21,3 +21,15 @@ raw <- read.table(here("data", "Results.txt"), header = TRUE,
                   stringsAsFactors = TRUE)
 glimpse(raw)
 ```
+## Check for missing data
+
+A mixed ANOVA needs every participant to have a value in every cell of the within-subjects
+factors. We count the movements in each combination of factors.
+
+```{r}
+#| label: count-id
+raw |> count(GROUP, ID)
+```
+
+The group `pp` has only 400 movements for ID3, against 760 for ID1 and ID2: many patients
+did not perform ID3, the most difficult condition. We remove ID3.
