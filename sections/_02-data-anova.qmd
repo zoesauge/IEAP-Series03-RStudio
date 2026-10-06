@@ -110,3 +110,12 @@ ezPlot(data = mt, dv = MT, wid = SUBJ, between = GROUP, within = ID,
 
 `ezStats()` gives the descriptive statistics of each cell (number of participants, mean,
 SD and FLSD). We keep them for the next questions.
+
+```{r}
+#| label: means-table
+mt_summary <- ezStats(data = mt, dv = MT, wid = SUBJ,
+                      between = GROUP, within = ID, type = 3) |>
+  rename(n = N, mean = Mean, sd = SD) |>
+  as_tibble()
+mt_summary |> mutate(across(c(mean, sd, FLSD), \(x) round(x, 2)))
+```
