@@ -10,3 +10,6 @@ the three groups?
    groups if the **GROUP × ID interaction** is significant. The main effects of GROUP and ID
    are secondary, and must be read with care if the interaction is significant
    [@field2012].
+
+3. **What sentence do we write?** A sentence that gives the direction of the effect and the
+   statistics, F(DFn, DFd), p and an effect size.
