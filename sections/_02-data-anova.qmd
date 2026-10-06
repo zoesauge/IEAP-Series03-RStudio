@@ -160,3 +160,11 @@ fmt_eff <- function(effect) {
 }
 m <- function(g, i) round(mt_summary$mean[mt_summary$GROUP == g & mt_summary$ID == i], 2)
 ```
+
+Movement time increased with the index of difficulty (`r fmt_eff("ID")`) and was longer for
+the patients than for both control groups (`r fmt_eff("GROUP")`). Crucially, the effect of
+difficulty was not the same in all groups (GROUP × ID interaction, `r fmt_eff("GROUP:ID")`):
+from ID1 to ID2, movement time increased by `r round(m("pp","ID2") - m("pp","ID1"), 2)` s in
+the patients (`r m("pp","ID1")` to `r m("pp","ID2")` s), but only by
+`r round(m("ap","ID2") - m("ap","ID1"), 2)` s in the age-matched adults and
+`r round(m("cp","ID2") - m("cp","ID1"), 2)` s in the young adults.
