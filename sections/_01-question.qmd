@@ -1,0 +1,7 @@
+# Think before coding (1.1)
+
+**Scientific question.** Is the effect of task difficulty (ID) on movement time the same in
+the three groups?
+
+1. **How do we visualise it?** Mean MT (± SD) as a function of ID, one line per group. If the
+   effect of ID is the same in all groups, the lines are parallel.
