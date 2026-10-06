@@ -51,3 +51,14 @@ d |> count(GROUP, REP)
 
 The third repetition is missing for the group `pp` and incomplete for the group `ap`
 (440 instead of 520 movements). We remove R3.
+
+```{r}
+#| label: drop-r3
+d <- d |> filter(REP != "R3") |> droplevels()
+d |> count(GROUP, REP)
+d |> distinct(GROUP, SUBJ) |> count(GROUP, name = "count")
+```
+
+The final data set has 13 age-matched adults, 19 young adults and 19 patients
+(51 participants), which matches the 48 error degrees of freedom of the article
+(51 − 3 groups = 48).
