@@ -33,3 +33,21 @@ raw |> count(GROUP, ID)
 
 The group `pp` has only 400 movements for ID3, against 760 for ID1 and ID2: many patients
 did not perform ID3, the most difficult condition. We remove ID3.
+
+```{r}
+#| label: drop-id3
+d <- raw |> filter(ID != "ID3") |> droplevels()
+levels(d$ID)
+d |> count(GROUP, ID)
+```
+
+We now check the repetitions.
+
+```{r}
+#| label: count-rep
+d |> count(REP)
+d |> count(GROUP, REP)
+```
+
+The third repetition is missing for the group `pp` and incomplete for the group `ap`
+(440 instead of 520 movements). We remove R3.
