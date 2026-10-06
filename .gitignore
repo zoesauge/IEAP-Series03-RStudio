@@ -1,0 +1,11 @@
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+.quarto/
+*_files/
+*.html
+*.tex
+*.log
+*.typ
+.DS_Store
