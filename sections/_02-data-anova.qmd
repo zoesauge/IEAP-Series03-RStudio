@@ -119,3 +119,23 @@ mt_summary <- ezStats(data = mt, dv = MT, wid = SUBJ,
   as_tibble()
 mt_summary |> mutate(across(c(mean, sd, FLSD), \(x) round(x, 2)))
 ```
+## Are the assumptions met?
+
+`ezANOVA()` reports Levene's test only for purely between-subjects designs, so we run it
+at each ID with `car::leveneTest()` (installed with `ez`). We check normality in each cell
+with the Shapiro–Wilk test.
+
+```{r}
+#| label: assumptions
+mt |>                                               # equal variances between groups
+  group_by(ID) |>
+  group_modify(\(df, key) {
+    lt <- car::leveneTest(MT ~ GROUP, data = df)
+    tibble(F = lt$`F value`[1], DFn = lt$Df[1], DFd = lt$Df[2], p = lt$`Pr(>F)`[1])
+  })
+mt |>                                               # normality in each cell
+  group_by(GROUP, ID) |>
+  summarise(W = shapiro.test(MT)$statistic, p = shapiro.test(MT)$p.value,
+            .groups = "drop")
+```
+
