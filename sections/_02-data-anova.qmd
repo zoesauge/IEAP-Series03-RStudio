@@ -62,3 +62,18 @@ d |> distinct(GROUP, SUBJ) |> count(GROUP, name = "count")
 The final data set has 13 age-matched adults, 19 young adults and 19 patients
 (51 participants), which matches the 48 error degrees of freedom of the article
 (51 − 3 groups = 48).
+
+
+## One value per participant and condition
+
+The ANOVA must compare participants, not movements: otherwise the hundreds of movements of
+one participant would be treated as independent observations (pseudo-replication). We
+average the movements of each participant in each ID.
+
+```{r}
+#| label: aggregate
+mt <- d |>
+  group_by(GROUP, SUBJ, ID) |>
+  summarise(MT = mean(MovementTime), .groups = "drop")
+mt |> count(GROUP, ID)
+```
