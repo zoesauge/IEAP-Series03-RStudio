@@ -139,3 +139,10 @@ mt |>                                               # normality in each cell
             .groups = "drop")
 ```
 
+The variances are not equal between groups (Levene's test, p < .001 at both IDs; the SD of the
+patients is more than ten times that of the young adults), and movement time departs
+from normality in two of the six cells (ID2 for the age-matched adults and for the
+patients, Shapiro–Wilk p < .05). With unequal group sizes, this makes the p-values
+approximate. However, the effects are so large (p < .001 for all three effects) that this
+does not change the conclusion; a log transformation of MT, which reduces the skewness,
+would be a reasonable robustness check.
