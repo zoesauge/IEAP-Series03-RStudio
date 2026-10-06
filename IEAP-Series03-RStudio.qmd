@@ -1,0 +1,30 @@
+---
+title: "IEAP Series 03 — Data wrangling and ANOVA"
+subtitle: "RStudio assignment · Team SAUGE / LAGARDE / AHMAD"
+author:
+  - name: Zoé SAUGE
+    affiliations: "Student A"
+  - name: Alexis LAGARDE
+    affiliations: "Student B"
+  - name: Albatoul AHMAD
+    affiliations: "Student C"
+date: today
+date-format: "D MMMM YYYY"
+lang: en
+format:
+  typst:
+    toc: true
+    section-numbering: "1.1"
+    papersize: a4
+    margin:
+      x: 2.2cm
+      y: 2.2cm
+    fig-width: 6.5
+    fig-height: 4.2
+bibliography: references.bib
+bibliographytitle: References
+execute:
+  echo: true
+  warning: false
+  message: false
+---
