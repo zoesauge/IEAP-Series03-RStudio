@@ -91,3 +91,22 @@ aov_mt <- ezANOVA(data = mt, dv = MT, wid = SUBJ,
 aov_mt$ANOVA
 aov_tab <- aov_mt$ANOVA
 ```
+
+With only two levels, the within-subjects factor ID cannot violate sphericity, so `ez` does
+not report Mauchly's test and no Greenhouse–Geisser correction is needed.
+
+## Visualise the interaction
+
+`ezPlot()` draws the cell means. Its error bars are Fisher's Least Significant Difference
+(FLSD) bars: two means whose bars do not overlap differ significantly.
+
+```{r}
+#| label: fig-interaction
+#| fig-cap: "Movement time as a function of ID in each group (ezPlot; error bars: Fisher's Least Significant Difference). The lines are clearly not parallel: the effect of ID is much larger for the patients (pp)."
+ezPlot(data = mt, dv = MT, wid = SUBJ, between = GROUP, within = ID,
+       x = ID, split = GROUP, type = 3,
+       x_lab = "ID", y_lab = "Movement Time (s)")
+```
+
+`ezStats()` gives the descriptive statistics of each cell (number of participants, mean,
+SD and FLSD). We keep them for the next questions.
