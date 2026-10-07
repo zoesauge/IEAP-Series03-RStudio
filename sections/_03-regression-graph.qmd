@@ -83,7 +83,97 @@ equations |>
   select(GROUP, equation, r_squared, p_value)
 ```
 
-The regression slopes can be compared with the ANOVA interaction. A significant
-GROUP × ID interaction means that the effect of difficulty differs between groups. The
-group with the steepest regression line should show the largest increase in movement
-time from ID1 to ID2.
+The regression slopes can be compared with the ANOVA interaction. A
+significant GROUP × ID interaction means that the effect of difficulty
+differs between groups. The group with the steepest regression line
+should show the largest increase in movement time from ID1 to ID2.
+
+# Save a graph in a PDF file for publication
+
+The following graph shows the participant-level mean movement times, the
+regression line for each group, and the equation of each regression.
+
+```{r}
+#| label: equation-positions
+#| include: false
+
+equation_labels <- equations |>
+  mutate(
+    x = 1.05,
+    y = c(3.0, 2.6, 2.2)
+  )
+```
+
+```{r}
+#| label: publication-graph
+#| fig-cap: "Mean movement time as a function of index of difficulty, with separate linear regression lines and equations for the three groups."
+#| fig-width: 8
+#| fig-height: 6
+
+publication_plot <- ggplot(
+  mt_regression,
+  aes(
+    x = ID_numeric,
+    y = MT,
+    colour = GROUP,
+    group = GROUP
+  )
+) +
+  geom_point(
+    alpha = 0.25,
+    size = 1.8
+  ) +
+  geom_smooth(
+    method = "lm",
+    formula = y ~ x,
+    se = FALSE,
+    linewidth = 0.9
+  ) +
+  geom_text(
+    data = equation_labels,
+    aes(
+      x = x,
+      y = y,
+      label = equation,
+      colour = GROUP
+    ),
+    inherit.aes = FALSE,
+    hjust = 0,
+    show.legend = FALSE
+  ) +
+  geom_blank(
+    data = tibble(
+      ID_numeric = c(0, 3),
+      MT = c(0, 6)
+    ),
+    aes(x = ID_numeric, y = MT),
+    inherit.aes = FALSE
+  ) +
+  scale_x_continuous(
+    breaks = c(1, 2),
+    labels = c("ID1", "ID2"),
+    limits = c(0, 3)
+  ) +
+  scale_y_continuous(
+    limits = c(0, 6)
+  ) +
+  labs(
+    title = "Movement time as a function of task difficulty",
+    x = "Index of difficulty (ID)",
+    y = "Mean movement time (s)",
+    colour = "Group"
+  ) +
+  theme_classic() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    legend.position = "right"
+  )
+
+publication_plot
+
+```
+
+The lines are not parallel: the increase in movement time between ID1
+and ID2 is larger for some groups (the stroke survivors) than for others
+(the healthy age-matched and young participants). This graphical result
+illustrates the significant GROUP × ID interaction found in the ANOVA.
