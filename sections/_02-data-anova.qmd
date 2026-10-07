@@ -1,0 +1,170 @@
+# Data reorganisation and ANOVA (1.3)
+
+## Load the data
+
+Each row of `Results.txt` is one movement: group, participant (`SUBJ`), trial, orientation
+(`ORI`), direction (`DIR`), index of difficulty (`ID`), repetition (`REP`), number of velocity
+peaks (`NbVelPeaks`, i.e. the number of sub-movements) and movement time in seconds.
+
+```{r}
+#| label: setup
+#| include: true
+library(tidyverse)  # data wrangling and ggplot2
+library(ez)         # mixed-design ANOVA (ezANOVA, ezPlot, ezStats)
+library(here)       # paths relative to the project root
+theme_set(theme_minimal(base_size = 11))
+```
+
+```{r}
+#| label: load
+raw <- read.table(here("data", "Results.txt"), header = TRUE,
+                  stringsAsFactors = TRUE)
+glimpse(raw)
+```
+## Check for missing data
+
+A mixed ANOVA needs every participant to have a value in every cell of the within-subjects
+factors. We count the movements in each combination of factors.
+
+```{r}
+#| label: count-id
+raw |> count(GROUP, ID)
+```
+
+The group `pp` has only 400 movements for ID3, against 760 for ID1 and ID2: many patients
+did not perform ID3, the most difficult condition. We remove ID3.
+
+```{r}
+#| label: drop-id3
+d <- raw |> filter(ID != "ID3") |> droplevels()
+levels(d$ID)
+d |> count(GROUP, ID)
+```
+
+We now check the repetitions.
+
+```{r}
+#| label: count-rep
+d |> count(REP)
+d |> count(GROUP, REP)
+```
+
+The third repetition is missing for the group `pp` and incomplete for the group `ap`
+(440 instead of 520 movements). We remove R3.
+
+```{r}
+#| label: drop-r3
+d <- d |> filter(REP != "R3") |> droplevels()
+d |> count(GROUP, REP)
+d |> distinct(GROUP, SUBJ) |> count(GROUP, name = "count")
+```
+
+The final data set has 13 age-matched adults, 19 young adults and 19 patients
+(51 participants), which matches the 48 error degrees of freedom of the article
+(51 − 3 groups = 48).
+
+
+## One value per participant and condition
+
+The ANOVA must compare participants, not movements: otherwise the hundreds of movements of
+one participant would be treated as independent observations (pseudo-replication). We
+average the movements of each participant in each ID.
+
+```{r}
+#| label: aggregate
+mt <- d |>
+  group_by(GROUP, SUBJ, ID) |>
+  summarise(MT = mean(MovementTime), .groups = "drop")
+mt |> count(GROUP, ID)
+```
+
+## Run the ANOVA
+
+`ezANOVA()` takes the dependent variable (`dv`), the participant identifier (`wid`), the
+between-subjects factor and the within-subjects factor. We ask for type III sums of
+squares because the groups have unequal sizes (13, 19 and 19 participants).
+
+```{r}
+#| label: anova
+aov_mt <- ezANOVA(data = mt, dv = MT, wid = SUBJ,
+                  between = GROUP, within = ID, type = 3)
+aov_mt$ANOVA
+aov_tab <- aov_mt$ANOVA
+```
+
+With only two levels, the within-subjects factor ID cannot violate sphericity, so `ez` does
+not report Mauchly's test and no Greenhouse–Geisser correction is needed.
+
+## Visualise the interaction
+
+`ezPlot()` draws the cell means. Its error bars are Fisher's Least Significant Difference
+(FLSD) bars: two means whose bars do not overlap differ significantly.
+
+```{r}
+#| label: fig-interaction
+#| fig-cap: "Movement time as a function of ID in each group (ezPlot; error bars: Fisher's Least Significant Difference). The lines are clearly not parallel: the effect of ID is much larger for the patients (pp)."
+ezPlot(data = mt, dv = MT, wid = SUBJ, between = GROUP, within = ID,
+       x = ID, split = GROUP, type = 3,
+       x_lab = "ID", y_lab = "Movement Time (s)")
+```
+
+`ezStats()` gives the descriptive statistics of each cell (number of participants, mean,
+SD and FLSD). We keep them for the next questions.
+
+```{r}
+#| label: means-table
+mt_summary <- ezStats(data = mt, dv = MT, wid = SUBJ,
+                      between = GROUP, within = ID, type = 3) |>
+  rename(n = N, mean = Mean, sd = SD) |>
+  as_tibble()
+mt_summary |> mutate(across(c(mean, sd, FLSD), \(x) round(x, 2)))
+```
+## Are the assumptions met?
+
+`ezANOVA()` reports Levene's test only for purely between-subjects designs, so we run it
+at each ID with `car::leveneTest()` (installed with `ez`). We check normality in each cell
+with the Shapiro–Wilk test.
+
+```{r}
+#| label: assumptions
+mt |>                                               # equal variances between groups
+  group_by(ID) |>
+  group_modify(\(df, key) {
+    lt <- car::leveneTest(MT ~ GROUP, data = df)
+    tibble(F = lt$`F value`[1], DFn = lt$Df[1], DFd = lt$Df[2], p = lt$`Pr(>F)`[1])
+  })
+mt |>                                               # normality in each cell
+  group_by(GROUP, ID) |>
+  summarise(W = shapiro.test(MT)$statistic, p = shapiro.test(MT)$p.value,
+            .groups = "drop")
+```
+
+The variances are not equal between groups (Levene's test, p < .001 at both IDs; the SD of the
+patients is more than ten times that of the young adults), and movement time departs
+from normality in two of the six cells (ID2 for the age-matched adults and for the
+patients, Shapiro–Wilk p < .05). With unequal group sizes, this makes the p-values
+approximate. However, the effects are so large (p < .001 for all three effects) that this
+does not change the conclusion; a log transformation of MT, which reduces the skewness,
+would be a reasonable robustness check.
+
+## Result sentence {#sec-result-sentence}
+
+```{r}
+#| label: result-values
+#| include: false
+fmt_eff <- function(effect) {
+  r <- aov_tab[aov_tab$Effect == effect, ]
+  p_txt <- if (r$p < .001) "p < .001" else paste0("p = ", round(r$p, 3))
+  sprintf("*F*(%d, %d) = %.2f, %s, $\\eta^2_G$ = %.2f",
+          r$DFn, r$DFd, r$F, p_txt, r$ges)
+}
+m <- function(g, i) round(mt_summary$mean[mt_summary$GROUP == g & mt_summary$ID == i], 2)
+```
+
+Movement time increased with the index of difficulty (`r fmt_eff("ID")`) and was longer for
+the patients than for both control groups (`r fmt_eff("GROUP")`). Crucially, the effect of
+difficulty was not the same in all groups (GROUP × ID interaction, `r fmt_eff("GROUP:ID")`):
+from ID1 to ID2, movement time increased by `r round(m("pp","ID2") - m("pp","ID1"), 2)` s in
+the patients (`r m("pp","ID1")` to `r m("pp","ID2")` s), but only by
+`r round(m("ap","ID2") - m("ap","ID1"), 2)` s in the age-matched adults and
+`r round(m("cp","ID2") - m("cp","ID1"), 2)` s in the young adults.
