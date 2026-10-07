@@ -177,3 +177,21 @@ The lines are not parallel: the increase in movement time between ID1
 and ID2 is larger for some groups (the stroke survivors) than for others
 (the healthy age-matched and young participants). This graphical result
 illustrates the significant GROUP × ID interaction found in the ANOVA.
+
+# Export the graph as a PDF file for publication
+
+The graph is exported with a width of 8 inches and a height of 6 inches, as requested in
+the assignment.
+
+```{r}
+#| label: export-publication-pdf
+
+ggsave(
+  filename = "movement_time_regression.pdf",
+  plot = publication_plot,
+  width = 8,
+  height = 6,
+  units = "in",
+  device = cairo_pdf
+)
+```
