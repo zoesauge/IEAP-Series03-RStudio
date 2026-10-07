@@ -1,22 +1,27 @@
 ---
 title: "_03-regression-graph"
 format: html
+editor: 
+  markdown: 
+    wrap: 72
 ---
 
 # Run the linear regression by GROUP
 
-To investigate the relationship between movement time and task difficulty, we fit one
-linear regression for each group. The dependent variable is movement time (`MT`) and the
-predictor is the index of difficulty (`ID`).
+To investigate the relationship between movement time and task
+difficulty, we fit one linear regression for each group. The dependent
+variable is movement time (`MT`) and the predictor is the index of
+difficulty (`ID`).
 
-The regression is performed on the participant-level means created in the previous section.
-This avoids treating the repeated movements of one participant as independent
-observations
+The regression is performed on the participant-level means created in
+the previous section. This avoids treating the repeated movements of one
+participant as independent observations
 
 ## Prepare the data
 
-`ID` is a categorical variable with values `ID1` and `ID2`. We create a numeric version
-for the regression, where `ID1` becomes 1 and `ID2` becomes 2.
+`ID` is a categorical variable with values `ID1` and `ID2`. We create a
+numeric version for the regression, where `ID1` becomes 1 and `ID2`
+becomes 2.
 
 ```{r}
 
@@ -29,3 +34,36 @@ mt_regression <- mt |>
 
 mt_regression
 ```
+
+## Fit one regression per group
+
+```{r}
+#| label: group-regressions
+
+regression_models <- mt_regression |>
+  group_by(GROUP) |>
+  group_modify(\(df, key) {
+    model <- lm(MT ~ ID_numeric, data = df)
+
+    tibble(
+      intercept = unname(coef(model)[1]),
+      slope = unname(coef(model)[2]),
+      r_squared = summary(model)$r.squared,
+      p_value = summary(model)$coefficients[2, 4]
+    )
+  }) |>
+  ungroup()
+
+regression_models
+```
+
+The regression equation is:
+
+\[ MT = a + b \times ID \]
+
+where (a) is the intercept and (b) is the slope. The slope indicates the
+increase in movement time associated with a one-unit increase in task
+difficulty. Therefore, the group with the largest slope is the group
+most affected by increasing task difficulty.
+
+
