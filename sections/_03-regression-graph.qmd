@@ -66,4 +66,24 @@ increase in movement time associated with a one-unit increase in task
 difficulty. Therefore, the group with the largest slope is the group
 most affected by increasing task difficulty.
 
+```{r}
+#| label: regression-equations
 
+equations <- regression_models |>
+  mutate(
+    equation = sprintf(
+      "MT = %.3f %s %.3f x ID",
+      intercept,
+      if_else(slope >= 0, "+", "-"),
+      abs(slope)
+    )
+  )
+
+equations |>
+  select(GROUP, equation, r_squared, p_value)
+```
+
+The regression slopes can be compared with the ANOVA interaction. A significant
+GROUP × ID interaction means that the effect of difficulty differs between groups. The
+group with the steepest regression line should show the largest increase in movement
+time from ID1 to ID2.
