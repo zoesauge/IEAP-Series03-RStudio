@@ -3,3 +3,29 @@ title: "_03-regression-graph"
 format: html
 ---
 
+# Run the linear regression by GROUP
+
+To investigate the relationship between movement time and task difficulty, we fit one
+linear regression for each group. The dependent variable is movement time (`MT`) and the
+predictor is the index of difficulty (`ID`).
+
+The regression is performed on the participant-level means created in the previous section.
+This avoids treating the repeated movements of one participant as independent
+observations
+
+## Prepare the data
+
+`ID` is a categorical variable with values `ID1` and `ID2`. We create a numeric version
+for the regression, where `ID1` becomes 1 and `ID2` becomes 2.
+
+```{r}
+
+#| label: regression-data
+
+mt_regression <- mt |>
+  mutate(
+    ID_numeric = as.numeric(sub("ID", "", ID))
+  )
+
+mt_regression
+```
