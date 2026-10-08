@@ -44,6 +44,10 @@ Then open `IEAP-Series03-RStudio.Rproj` in RStudio, open `IEAP-Series03-RStudio.
 click **Render** (or run `quarto render IEAP-Series03-RStudio.qmd`). The PDF is produced
 with Typst, which is included in Quarto, so no LaTeX installation is needed.
 
+```r
+   install.packages(c("tidyverse", "ez", "here"))
+```
+
 ## Git workflow
 
 - One branch per part of the report, merged into `main` through a pull request with a
