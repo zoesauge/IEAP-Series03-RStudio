@@ -1,0 +1,7 @@
+# Our Git workflow strategy {.unnumbered}
+
+**Repository.** Zoé created the public repository `IEAP-Series03-RStudio` on her GitHub
+account and added Alexis and Albatoul as collaborators. Her first two commits set up the
+project (README, LICENSE, `.gitignore`, RStudio project, master document, references and
+data). After that, nobody committed directly on `main`: it only received merges.
+
