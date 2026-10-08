@@ -1,0 +1,113 @@
+# Differences with the article (1.7)
+
+## Putting our equations on the same scale as the article
+
+In the regression section, ID was coded 1 for ID1 and 2 for ID2 (`ID_numeric`). The slopes of `regression_models` are therefore in seconds **per ID step**, and the intercepts are the movement times predicted at a step "0" that does not exist. The article fits Fitts' law on the index of difficulty in **bits** [@mottet2017; @fitts1954]. The two IDs of the task are
+3.80 and 5.43 bits (x-axis of Fig 3 of the article), so one ID step is 1.63 bits.
+
+To compare our equations with those of the article, we convert them to bits. The line goes through the same two group means; only the unit of the x-axis changes:
+
+   - slope (s/bit) = slope (s/step) / 1.63;
+   - intercept (s) = predicted MT at ID1 − slope (s/bit) × 3.80.
+   
+
+```{r}
+#| label: compare-article
+id_bits <- c(ID1 = 3.80, ID2 = 5.43)
+step_bits <- unname(id_bits["ID2"] - id_bits["ID1"])
+
+article <- tibble(
+  GROUP = c("pp", "ap", "cp"),
+  intercept_article = c(0.422, 0.622, 0.475),
+  slope_article     = c(0.672, 0.118, 0.097)
+)
+
+comparison <- regression_models |>
+  mutate(GROUP = as.character(GROUP),
+         slope_ours     = slope / step_bits,
+         intercept_ours = (intercept + slope * 1) - slope_ours * id_bits["ID1"]) |>
+  select(GROUP, intercept_ours, slope_ours, r_squared) |>
+  left_join(article, by = "GROUP") |>
+  mutate(GROUP = factor(GROUP, levels = c("pp", "ap", "cp"))) |>
+  arrange(GROUP) |>
+  mutate(slope_ratio_ours    = slope_ours / slope_ours[GROUP == "cp"],
+         slope_ratio_article = slope_article / slope_article[GROUP == "cp"])
+
+comparison |> mutate(across(where(is.numeric), \(x) round(x, 3)))
+```
+
+```{r}
+#| label: compare-values
+#| include: false
+cmp <- function(g, col) comparison[[col]][comparison$GROUP == g]
+```
+
+## What differs
+
+- **The patients' slope is steeper**: `r round(cmp("pp", "slope_ours"), 3)` s/bit against 0.672 s/bit in the article, and the intercept becomes negative (`r round(cmp("pp", "intercept_ours"), 3)` s), which has no physical meaning: a movement cannot take a negative time at ID = 0.
+- **The controls' slopes are a little steeper too**:
+  `r round(cmp("ap", "slope_ours"), 3)` and `r round(cmp("cp", "slope_ours"), 3)` s/bit,
+  against 0.118 and 0.097 s/bit.
+- **Our patients are slower at ID2**: their mean movement time is
+  `r round(mt_summary$mean[mt_summary$GROUP == "pp" & mt_summary$ID == "ID2"], 2)` s, with a very large spread between patients. This is why the patients' regression explains little of the variance ($R^2$ = `r round(cmp("pp", "r_squared"), 2)`): the difference between patients is much larger than the effect of ID.
+
+These differences come from the simpler method used here. Several choices may matter (the
+article does not describe all of them, so these are hypotheses):
+
+1. **Data selected.** We removed ID3 and the third repetition to obtain a complete design.
+   The article may have kept them, or handled the missing cells differently.
+2. **How trials are averaged.** We used the mean of all the movements of each participant.
+   Movement time is right-skewed (a few very slow corrective movements), so the mean is
+   pulled up by the slowest movements, especially in the patients. A median, a log
+   transformation or the removal of outlier trials would give smaller values and a smaller
+   slope.
+3. **Which ID.** We used the *nominal* ID of the task. Fitts' law is often fitted on the
+   *effective* ID, computed from the actual spread of the endpoints, which can differ
+   between groups.
+4. **The full design.** The article also includes orientation and direction as factors
+   (with Greenhouse–Geisser corrections), whereas we averaged over them.
+5. **The regression model.** Our regression treats the two values of each participant as
+   independent observations, while the article analyses them as repeated measures. This
+   does not change the slope (the line goes through the two group means), but it makes the
+   $R^2$ and the p-values of the regressions approximate.
+   
+
+## Are the conclusions the same?
+
+```{r}
+#| label: controls-only
+# Do the two control groups differ? Same ANOVA without the patients.
+mt_controls <- mt |> filter(GROUP != "pp") |> droplevels()
+aov_controls <- ezANOVA(data = mt_controls, dv = MT, wid = SUBJ,
+                        between = GROUP, within = ID, type = 3)$ANOVA
+aov_controls
+```
+
+**Yes, the conclusions are the same**, because they rest on the *pattern* of the results,
+which is identical, and not on the exact values:
+
+- **Movement time increases with difficulty in all groups:** the three slopes are positive
+  and the main effect of ID is significant.
+- **Patients are much slower** (main effect of GROUP, the largest effect,
+  $\eta^2_G$ = `r round(aov_tab$ges[aov_tab$Effect == "GROUP"], 2)`).
+- **Patients are much more sensitive to accuracy constraints:** their slope is
+  `r round(cmp("pp", "slope_ratio_ours"), 1)` times that of the young adults here, and
+  `r round(cmp("pp", "slope_ratio_article"), 1)` times in the article. The ratio does not
+  depend on how ID is coded, so it can be compared directly. The GROUP × ID interaction is
+  significant (p < .001), so it passes even the stricter α = .01 used in the article.
+- **Age alone does not change the effect of difficulty:** the slopes of the two control
+  groups are close in both analyses. Without the patients, the GROUP × ID interaction is
+  `r if (aov_controls$p[aov_controls$Effect == "GROUP:ID"] < .01) "significant" else "not significant"`
+  at α = .01 (p = `r round(aov_controls$p[aov_controls$Effect == "GROUP:ID"], 3)`). The
+  age-matched adults are slightly slower overall than the young adults (main effect of
+  GROUP, p = `r round(aov_controls$p[aov_controls$Effect == "GROUP"], 3)`), but this
+  difference of about `r round(mean(mt$MT[mt$GROUP == "ap"]) - mean(mt$MT[mt$GROUP == "cp"]), 2)` s
+  is tiny compared with the `r round(mean(mt$MT[mt$GROUP == "pp"]) - mean(mt$MT[mt$GROUP == "ap"]), 1)` s
+  that separate the patients from the age-matched adults: the large difference is due to
+  the stroke, not to age.
+
+The effects are very large compared with the noise, so different reasonable choices in the
+data processing change the size of the estimates but not their direction or their
+significance. The main limit of our simpler analysis is that, with two IDs only, it cannot
+show that the relation between movement time and ID is *linear*; it only shows that
+movement time increases with ID, and much more steeply after a stroke.
