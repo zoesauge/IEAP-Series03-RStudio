@@ -22,3 +22,10 @@
 - **Included files.** A section file that keeps its own YAML header (`title`, `format`)
   overrides the header of the master document, and the whole report was then rendered in
   HTML under the wrong title. Section files must contain only text and code.
+
+## Individual lessons {.unnumbered}
+
+- **Zoé SAUGE:** I learned to start from the scientific question and break it into precise sub-questions before writing any code, and to choose a suitable library, such as ez, to run the ANOVA reliably. In the discussion, comparing our results with the article taught me to put results on the same scale before comparing them (ID steps vs. bits), and that a simpler method can lead to the same conclusions as long as its limits are clearly stated.
+- **Alexis LAGARDE:** Better handling of the method to work with a section folder with a master document where we include all files in it. Working on 1.3 taught me to check the data before testing: counting the cells revealed missing conditions, and averaging per participant avoided pseudo-replication. On the Git side, small commits on one branch per question made teamwork easy, but we should have agreed on branch names and reviewed each other's pull
+  requests.
+- **Albatoul AHMAD:**
