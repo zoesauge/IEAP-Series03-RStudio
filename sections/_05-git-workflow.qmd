@@ -1,0 +1,38 @@
+# Our Git workflow strategy {.unnumbered}
+
+**Repository.** Zoé created the public repository `IEAP-Series03-RStudio` on her GitHub
+account and added Alexis and Albatoul as collaborators. Her first two commits set up the
+project (README, LICENSE, `.gitignore`, RStudio project, master document, references and
+data). After that, nobody committed directly on `main`: it only received merges.
+
+**One file per person.** The master document only contains the header and the `include`
+lines. Each question lives in its own file in `sections/`, and each file has one owner, so
+we never edit the same lines and we never had a merge conflict.
+
+| Member | Questions | File | Branch |
+|:--|:--|:--|:--|
+| Zoé SAUGE | 1.1, 1.2 | `_01-question.qmd` | `1.1Think` |
+| Alexis LAGARDE | 1.3 | `_02-data-anova.qmd` | `1.2-data-anova` |
+| Albatoul AHMAD | 1.4, 1.5, 1.6 | `_03-regression-graph.qmd` | `1.4-1.6-regression-graph` |
+| Zoé SAUGE | 1.7 | `_04-discussion.qmd` | `1.7-discussion` |
+| Alexis LAGARDE | Git workflow | `_05-git-workflow.qmd` | `git-challenges` |
+| Everyone | challenges, sources, checklist | `_06-challenges-checklist.qmd` | `git-challenges` |
+
+**Branches and pull requests.** Each part was developed on its own branch, created from an
+up-to-date `main`, and merged back through a pull request on GitHub.
+
+**Order of the merges.** The questions depend on each other: the regression (1.4) uses the
+participant means `mt` created in 1.3, the figure (1.5–1.6) uses the regression, and the
+discussion (1.7) uses `regression_models`, `mt_summary` and the ANOVA table. The pull
+requests were therefore merged in the order of the questions: `1.1Think` (#1), then
+`1.2-data-anova` (#2), then `1.4-1.6-regression-graph`, then `1.7-discussion`. Before
+starting a new branch, each member pulled `main`.
+
+**Commit messages.** Each commit does one step of a question and its message describes it
+in the imperative: for example `Remove incomplete patient condition from ANOVA`,
+`Add per-group regression analysis section`, `Add PDF export for regression graph`. Each
+question has several commits (4 for 1.1–1.2, 13 for 1.3, 7 for 1.4–1.6).
+
+**What we would do differently.** Our branch names are not fully consistent: `1.1Think`
+has no separator, and `1.2-data-anova` contains question 1.3. A fixed pattern decided at
+the start (for example `<question>-<topic>`) would make the history easier to read.

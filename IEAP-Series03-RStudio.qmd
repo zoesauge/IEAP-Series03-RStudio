@@ -36,3 +36,7 @@ execute:
 {{< include sections/_03-regression-graph.qmd >}}
 
 {{< include sections/_04-discussion.qmd >}}
+
+{{< include sections/_05-git-workflow.qmd >}}
+
+{{< include sections/_06-challenges-checklist.qmd >}}

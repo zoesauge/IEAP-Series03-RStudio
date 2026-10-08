@@ -1,11 +1,3 @@
----
-title: "_03-regression-graph"
-format: html
-editor: 
-  markdown: 
-    wrap: 72
----
-
 # Run the linear regression by GROUP
 
 To investigate the relationship between movement time and task
