@@ -70,3 +70,16 @@ article does not describe all of them, so these are hypotheses):
    independent observations, while the article analyses them as repeated measures. This
    does not change the slope (the line goes through the two group means), but it makes the
    $R^2$ and the p-values of the regressions approximate.
+   
+
+## Are the conclusions the same?
+
+```{r}
+#| label: controls-only
+# Do the two control groups differ? Same ANOVA without the patients.
+mt_controls <- mt |> filter(GROUP != "pp") |> droplevels()
+aov_controls <- ezANOVA(data = mt_controls, dv = MT, wid = SUBJ,
+                        between = GROUP, within = ID, type = 3)$ANOVA
+aov_controls
+```
+
