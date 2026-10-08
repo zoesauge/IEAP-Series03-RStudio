@@ -105,3 +105,9 @@ which is identical, and not on the exact values:
   is tiny compared with the `r round(mean(mt$MT[mt$GROUP == "pp"]) - mean(mt$MT[mt$GROUP == "ap"]), 1)` s
   that separate the patients from the age-matched adults: the large difference is due to
   the stroke, not to age.
+
+The effects are very large compared with the noise, so different reasonable choices in the
+data processing change the size of the estimates but not their direction or their
+significance. The main limit of our simpler analysis is that, with two IDs only, it cannot
+show that the relation between movement time and ID is *linear*; it only shows that
+movement time increases with ID, and much more steeply after a stroke.
