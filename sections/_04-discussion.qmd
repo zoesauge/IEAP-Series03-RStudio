@@ -95,3 +95,13 @@ which is identical, and not on the exact values:
   `r round(cmp("pp", "slope_ratio_article"), 1)` times in the article. The ratio does not
   depend on how ID is coded, so it can be compared directly. The GROUP × ID interaction is
   significant (p < .001), so it passes even the stricter α = .01 used in the article.
+- **Age alone does not change the effect of difficulty:** the slopes of the two control
+  groups are close in both analyses. Without the patients, the GROUP × ID interaction is
+  `r if (aov_controls$p[aov_controls$Effect == "GROUP:ID"] < .01) "significant" else "not significant"`
+  at α = .01 (p = `r round(aov_controls$p[aov_controls$Effect == "GROUP:ID"], 3)`). The
+  age-matched adults are slightly slower overall than the young adults (main effect of
+  GROUP, p = `r round(aov_controls$p[aov_controls$Effect == "GROUP"], 3)`), but this
+  difference of about `r round(mean(mt$MT[mt$GROUP == "ap"]) - mean(mt$MT[mt$GROUP == "cp"]), 2)` s
+  is tiny compared with the `r round(mean(mt$MT[mt$GROUP == "pp"]) - mean(mt$MT[mt$GROUP == "ap"]), 1)` s
+  that separate the patients from the age-matched adults: the large difference is due to
+  the stroke, not to age.
