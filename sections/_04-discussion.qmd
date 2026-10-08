@@ -83,3 +83,8 @@ aov_controls <- ezANOVA(data = mt_controls, dv = MT, wid = SUBJ,
 aov_controls
 ```
 
+**Yes, the conclusions are the same**, because they rest on the *pattern* of the results,
+which is identical, and not on the exact values:
+
+- **Movement time increases with difficulty in all groups:** the three slopes are positive
+  and the main effect of ID is significant.
