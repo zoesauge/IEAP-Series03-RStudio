@@ -27,3 +27,12 @@ discussion (1.7) uses `regression_models`, `mt_summary` and the ANOVA table. The
 requests were therefore merged in the order of the questions: `1.1Think` (#1), then
 `1.2-data-anova` (#2), then `1.4-1.6-regression-graph`, then `1.7-discussion`. Before
 starting a new branch, each member pulled `main`.
+
+**Commit messages.** Each commit does one step of a question and its message describes it
+in the imperative: for example `Remove incomplete patient condition from ANOVA`,
+`Add per-group regression analysis section`, `Add PDF export for regression graph`. Each
+question has several commits (4 for 1.1–1.2, 13 for 1.3, 7 for 1.4–1.6).
+
+**What we would do differently.** Our branch names are not fully consistent: `1.1Think`
+has no separator, and `1.2-data-anova` contains question 1.3. A fixed pattern decided at
+the start (for example `<question>-<topic>`) would make the history easier to read.
