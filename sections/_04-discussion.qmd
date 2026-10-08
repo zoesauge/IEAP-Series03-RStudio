@@ -41,3 +41,19 @@ comparison |> mutate(across(where(is.numeric), \(x) round(x, 3)))
 #| include: false
 cmp <- function(g, col) comparison[[col]][comparison$GROUP == g]
 ```
+
+## What differs
+
+- **The patients' slope is steeper**: `r round(cmp("pp", "slope_ours"), 3)` s/bit against
+  0.672 s/bit in the article, and the intercept becomes negative
+  (`r round(cmp("pp", "intercept_ours"), 3)` s), which has no physical meaning: a movement
+  cannot take a negative time at ID = 0.
+- **The controls' slopes are a little steeper too**:
+  `r round(cmp("ap", "slope_ours"), 3)` and `r round(cmp("cp", "slope_ours"), 3)` s/bit,
+  against 0.118 and 0.097 s/bit.
+- **Our patients are slower at ID2**: their mean movement time is
+  `r round(mt_summary$mean[mt_summary$GROUP == "pp" & mt_summary$ID == "ID2"], 2)` s, with a
+  very large spread between patients. This is why the patients' regression explains little
+  of the variance ($R^2$ = `r round(cmp("pp", "r_squared"), 2)`): the difference between
+  patients is much larger than the effect of ID.
+
