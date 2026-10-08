@@ -28,7 +28,7 @@
 - **Zoé SAUGE:** I learned to start from the scientific question and break it into precise sub-questions before writing any code, and to choose a suitable library, such as ez, to run the ANOVA reliably. In the discussion, comparing our results with the article taught me to put results on the same scale before comparing them (ID steps vs. bits), and that a simpler method can lead to the same conclusions as long as its limits are clearly stated.
 - **Alexis LAGARDE:** Better handling of the method to work with a section folder with a master document where we include all files in it. Working on 1.3 taught me to check the data before testing: counting the cells revealed missing conditions, and averaging per participant avoided pseudo-replication. On the Git side, small commits on one branch per question made teamwork easy, but we should have agreed on branch names and reviewed each other's pull
   requests.
-- **Albatoul AHMAD:**
+- **Albatoul AHMAD:** I learned how to read research papers and actually understand what the figures are showing and how the researchers reached their results. I also learned how to use ANOVA to analyze the data and see whether there are meaningful differences between groups.
 
 # Data sources {.unnumbered}
 
@@ -38,3 +38,30 @@
 
 Software: R, with the packages `tidyverse` [@wickham2019], `ez`
 [@lawrence2026] and `here`.
+
+# Grading checklist {.unnumbered}
+
+We went through this list before the final merge into `main`.
+
+| | Criterion | Where / how we checked |
+|:-:|:--|:--|
+| ☐ | Public repository named exactly `IEAP-Series03-RStudio` | <https://github.com/zoesauge/IEAP-Series03-RStudio>, opened in a private browser window |
+| ☐ | `main` branch up to date (it is the graded branch) | All pull requests merged; nothing left on other branches |
+| ☐ | Clear and complete `README.md` | Team, structure, how to render, Git workflow |
+| ☐ | `LICENSE` file | MIT license |
+| ☐ | Master document `IEAP-Series03-RStudio.qmd` | Renders to PDF without error from a fresh clone |
+| ☐ | Corresponding PDF `IEAP-Series03-RStudio.pdf` in the repository | Committed, at the end |
+| ☐ | Authors and date in the header | Title page |
+| ☐ | Clickable link to the GitHub repository | "About this report", first page |
+| ☐ | Analysis of our Git workflow strategy | Section "Our Git workflow strategy" |
+| ☐ | Challenges encountered and lessons learned | Section "Challenges", with one paragraph per member |
+| ☐ | Complete code and answers to questions 1.1 to 1.7 | One section per question, code visible |
+| ☐ | Figure exported as an 8 × 6 inch PDF | `movement_time_regression.pdf` |
+| ☐ | Data sources with URLs | Section "Data sources" |
+| ☐ | Scientific references with DOIs | Bibliography |
+| ☐ | Meaningful commit messages, at least one commit per question | Github commit history |
+| ☐ | Principled use of branches | One branch per part, merged by pull request with a merge commit |
+| ☐ | Each member committed from their own account | GitHub commit history |
+| ☐ | PDF uploaded on Moodle | Done by: Zoé Sauge|
+
+
