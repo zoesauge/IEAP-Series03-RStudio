@@ -44,16 +44,29 @@ cmp <- function(g, col) comparison[[col]][comparison$GROUP == g]
 
 ## What differs
 
-- **The patients' slope is steeper**: `r round(cmp("pp", "slope_ours"), 3)` s/bit against
-  0.672 s/bit in the article, and the intercept becomes negative
-  (`r round(cmp("pp", "intercept_ours"), 3)` s), which has no physical meaning: a movement
-  cannot take a negative time at ID = 0.
+- **The patients' slope is steeper**: `r round(cmp("pp", "slope_ours"), 3)` s/bit against 0.672 s/bit in the article, and the intercept becomes negative (`r round(cmp("pp", "intercept_ours"), 3)` s), which has no physical meaning: a movement cannot take a negative time at ID = 0.
 - **The controls' slopes are a little steeper too**:
   `r round(cmp("ap", "slope_ours"), 3)` and `r round(cmp("cp", "slope_ours"), 3)` s/bit,
   against 0.118 and 0.097 s/bit.
 - **Our patients are slower at ID2**: their mean movement time is
-  `r round(mt_summary$mean[mt_summary$GROUP == "pp" & mt_summary$ID == "ID2"], 2)` s, with a
-  very large spread between patients. This is why the patients' regression explains little
-  of the variance ($R^2$ = `r round(cmp("pp", "r_squared"), 2)`): the difference between
-  patients is much larger than the effect of ID.
+  `r round(mt_summary$mean[mt_summary$GROUP == "pp" & mt_summary$ID == "ID2"], 2)` s, with a very large spread between patients. This is why the patients' regression explains little of the variance ($R^2$ = `r round(cmp("pp", "r_squared"), 2)`): the difference between patients is much larger than the effect of ID.
 
+These differences come from the simpler method used here. Several choices may matter (the
+article does not describe all of them, so these are hypotheses):
+
+1. **Data selected.** We removed ID3 and the third repetition to obtain a complete design.
+   The article may have kept them, or handled the missing cells differently.
+2. **How trials are averaged.** We used the mean of all the movements of each participant.
+   Movement time is right-skewed (a few very slow corrective movements), so the mean is
+   pulled up by the slowest movements, especially in the patients. A median, a log
+   transformation or the removal of outlier trials would give smaller values and a smaller
+   slope.
+3. **Which ID.** We used the *nominal* ID of the task. Fitts' law is often fitted on the
+   *effective* ID, computed from the actual spread of the endpoints, which can differ
+   between groups.
+4. **The full design.** The article also includes orientation and direction as factors
+   (with Greenhouse–Geisser corrections), whereas we averaged over them.
+5. **The regression model.** Our regression treats the two values of each participant as
+   independent observations, while the article analyses them as repeated measures. This
+   does not change the slope (the line goes through the two group means), but it makes the
+   $R^2$ and the p-values of the regressions approximate.
