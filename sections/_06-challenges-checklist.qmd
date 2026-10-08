@@ -1,0 +1,12 @@
+
+# Challenges encountered and lessons learned {.unnumbered}
+
+## Technical challenges {.unnumbered}
+
+- **Incomplete data.** The data set looked complete at first sight (7,560 movements), but
+  counting the movements per combination of factors showed that ID3 and the third
+  repetition were missing for some groups. Lesson: always count the observations per cell
+  before running an ANOVA, because a mixed ANOVA needs every participant in every cell.
+- **Averaging before the ANOVA.** Running the ANOVA on single movements would treat each
+  movement as an independent participant and give absurdly small p-values. We had to
+  aggregate to one value per participant and condition first (`mt`).
