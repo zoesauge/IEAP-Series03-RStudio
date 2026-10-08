@@ -35,6 +35,7 @@
 | Data | Description | Source |
 |:--|:--|:--|
 | `data/Results.txt` | 7,560 pointing movements: 51 participants (19 patients after stroke, 13 age-matched adults, 19 young adults), 3 IDs, 3 repetitions, 5 orientations, 2 directions; number of velocity peaks and movement time | Course Moodle page, IEAP Series 03: <https://moodle.umontpellier.fr/pluginfile.php/3002188/mod_folder/content/0/Results.txt?forcedownload=1> |
+| Fig 3 of the article | ID values (3.80 and 5.43 bits) and regression equations used in 1.7 | Mottet et al. (2017), PLoS ONE: <https://doi.org/10.1371/journal.pone.0173674> |
 
 Software: R, with the packages `tidyverse` [@wickham2019], `ez`
 [@lawrence2026] and `here`.
