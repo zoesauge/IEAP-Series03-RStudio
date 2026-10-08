@@ -29,3 +29,12 @@
 - **Alexis LAGARDE:** Better handling of the method to work with a section folder with a master document where we include all files in it. Working on 1.3 taught me to check the data before testing: counting the cells revealed missing conditions, and averaging per participant avoided pseudo-replication. On the Git side, small commits on one branch per question made teamwork easy, but we should have agreed on branch names and reviewed each other's pull
   requests.
 - **Albatoul AHMAD:**
+
+# Data sources {.unnumbered}
+
+| Data | Description | Source |
+|:--|:--|:--|
+| `data/Results.txt` | 7,560 pointing movements: 51 participants (19 patients after stroke, 13 age-matched adults, 19 young adults), 3 IDs, 3 repetitions, 5 orientations, 2 directions; number of velocity peaks and movement time | Course Moodle page, IEAP Series 03: <https://moodle.umontpellier.fr/pluginfile.php/3002188/mod_folder/content/0/Results.txt?forcedownload=1> |
+
+Software: R, with the packages `tidyverse` [@wickham2019], `ez`
+[@lawrence2026] and `here`.
