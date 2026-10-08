@@ -10,3 +10,15 @@
 - **Averaging before the ANOVA.** Running the ANOVA on single movements would treat each
   movement as an independent participant and give absurdly small p-values. We had to
   aggregate to one value per participant and condition first (`mt`).
+- **A numeric ID.** ID is a factor in the ANOVA but must be a number for the regression.
+  We coded it 1 and 2 (`ID_numeric`), which gives slopes per ID step. To compare our
+  equations with the article, which uses ID in bits, we had to convert them in the
+  discussion (1.7). Lesson: check the units of a model before comparing it with a
+  published one.
+- **The publication figure.** Combining the participant points, one regression line per
+  group and the equations on the same graph required one data frame per layer
+  (`mt_regression` for the points and lines, `equation_labels` for the text) and fixed
+  axis limits.
+- **Included files.** A section file that keeps its own YAML header (`title`, `format`)
+  overrides the header of the master document, and the whole report was then rendered in
+  HTML under the wrong title. Section files must contain only text and code.
