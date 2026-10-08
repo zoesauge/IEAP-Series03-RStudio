@@ -34,3 +34,4 @@ execute:
 {{< include sections/_02-data-anova.qmd >}}
 
 {{< include sections/_03-regression-graph.qmd >}}
+{{< include sections/_04-discussion.qmd >}}
