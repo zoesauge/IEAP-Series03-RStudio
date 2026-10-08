@@ -1,1 +1,6 @@
 # Differences with the article (1.7)
+
+## Putting our equations on the same scale as the article
+
+In the regression section, ID was coded 1 for ID1 and 2 for ID2 (`ID_numeric`). The slopes of `regression_models` are the movement times predicted at a step "0" that does not exist. The article fits Fitts' law on the index of difficulty in **bits** [@mottet2017; @fitts1954]. The two IDs of the task are
+3.80 and 5.43 bits (x-axis of Fig 3 of the article), so one ID step is 1.63 bits.
