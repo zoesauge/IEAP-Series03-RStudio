@@ -90,3 +90,8 @@ which is identical, and not on the exact values:
   and the main effect of ID is significant.
 - **Patients are much slower** (main effect of GROUP, the largest effect,
   $\eta^2_G$ = `r round(aov_tab$ges[aov_tab$Effect == "GROUP"], 2)`).
+- **Patients are much more sensitive to accuracy constraints:** their slope is
+  `r round(cmp("pp", "slope_ratio_ours"), 1)` times that of the young adults here, and
+  `r round(cmp("pp", "slope_ratio_article"), 1)` times in the article. The ratio does not
+  depend on how ID is coded, so it can be compared directly. The GROUP × ID interaction is
+  significant (p < .001), so it passes even the stricter α = .01 used in the article.
