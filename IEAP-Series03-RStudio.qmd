@@ -13,7 +13,6 @@ date-format: "D MMMM YYYY"
 lang: en
 format:
   typst:
-    toc: true
     section-numbering: "1.1"
     papersize: a4
     margin:
@@ -29,6 +28,14 @@ execute:
   message: false
 ---
 
+- **GitHub repository:** <https://github.com/zoesauge/IEAP-Series03-RStudio>
+- **Course:** IEAP, Series 03, *Data wrangling and ANOVA*
+- **Article reproduced:** Mottet et al. (2017), *Trajectory formation principles are the
+  same after mild or moderate stroke* [@mottet2017].
+- **How this file is built:** this is the *master document*. Each section lives in its own
+  file in `sections/` and is pulled in with an `include`, so that each team member edits a
+  different file.
+  
 {{< include sections/_01-question.qmd >}}
 
 {{< include sections/_02-data-anova.qmd >}}
